@@ -7,12 +7,13 @@ from typing import Callable
 def fabric_decor_log(log_file):
     def decor_log(function: Callable):
         def new_function(*args, **kwargs):
+            print(f'Вызвана функция {function.__name__}')
             with open(log_file, 'a+', encoding='utf-8') as f:
                 f.write(f'Datetime of function call: {datetime.now()},\n')
                 f.write(f'Function name: {function.__name__},\n')
                 f.write(f'Arguments: {args} и {kwargs},\n')
                 f.write(f'Return value: {function(*args, **kwargs)};\n\n')
-            # return function()
+            return function(*args, **kwargs)
         return new_function
     return decor_log
 
@@ -32,13 +33,14 @@ def top():
             if len(word) > 6:
                 list_of_descriptions.append(word)
 
-    top = Counter(list_of_descriptions)
+    top10 = Counter(list_of_descriptions)
     print("Топ 10 самых часто встречающихся в новостях слов длиннее"
           " 6 символов:")
-    for num_, word_count in enumerate(top.most_common(10), 1):
+    for num_, word_count in enumerate(top10.most_common(10), 1):
         # Возвращаем список из 10 наиболее распространенных слов
         # и их количество от наиболее к наименее распространенным
         print(f'{str(num_)} - {word_count[0]} ({word_count[1]} слов)')
+    return "Вернули топ 10 слов длиннее 6 символов:"
 
 if __name__ == '__main__':
     top()
